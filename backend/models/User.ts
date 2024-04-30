@@ -67,4 +67,4 @@ type UserAttributes = {
 
 
 type UserCreationAttributes = Optional<UserAttributes, 'user_id'>;
-export { User, UserAttributes, UserCreationAttributes };
+export { User, UserAttributes, UserCreationAttributes, UserModel };

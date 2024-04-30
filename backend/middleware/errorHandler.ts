@@ -7,10 +7,20 @@ const errorhandler: ErrorRequestHandler = async (err, req, res, next) => {
 
     if (err instanceof CustomAPIError) {
         statusCode = err.statusCode
-        message = JSON.parse(err.message)
+        
+        try {
+            message = JSON.parse(err.message)
+            res.status(statusCode).json({ error: message })
+        } catch (error) {
+
+            if(err.message){
+                message = err.message
+            }
+            res.status(statusCode).json({ error: message })
+        }
     }
 
-    res.status(statusCode).json({ error: message })
+    
 }
 
 export default errorhandler;

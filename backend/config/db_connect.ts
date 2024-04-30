@@ -16,7 +16,7 @@ const config: {
         "username": "Admin",
         "password": "2002jan26",
         "database": "KozossegiKonyha",
-        "host": "KORNELPC",
+        "host": "localhost",
         "dialect": "mssql"
     },
     "production": {
