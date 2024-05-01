@@ -59,7 +59,6 @@ type UserAttributes = {
     email: string;
     password: string;
     profile_picture?: string;
-    registration_date?: Date;
     is_admin?: boolean;
     createdAt?: Date;
     updatedAt?: Date;

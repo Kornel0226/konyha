@@ -13,6 +13,7 @@ import bodyParser from 'body-parser';
 import errorhandler from './middleware/errorHandler';
 import sequelizeErrorHandler from './middleware/sequalizeErrorhandler';
 import dotenv from "dotenv"
+import { recipeRouter } from './routes/recipes';
 
 dotenv.config()
 
@@ -46,7 +47,8 @@ app.get("/", async (req, res) => {
 });
 //Routerek
 
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/recipes", recipeRouter)
 app.use(sequelizeErrorHandler);
 app.use(errorhandler);
 
