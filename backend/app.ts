@@ -14,6 +14,7 @@ import errorhandler from './middleware/errorHandler';
 import sequelizeErrorHandler from './middleware/sequalizeErrorhandler';
 import dotenv from "dotenv"
 import { recipeRouter } from './routes/recipes';
+import categoryRouter from './routes/category';
 
 dotenv.config()
 
@@ -49,6 +50,7 @@ app.get("/", async (req, res) => {
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/recipes", recipeRouter)
+app.use("/api/v1/categories", categoryRouter)
 app.use(sequelizeErrorHandler);
 app.use(errorhandler);
 

@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Recipe } from "../models/Recipe";
+import { Recipe, RecipeAttributes, RecipeCreationAttributes } from "../models/Recipe";
 import BadRequestError from "../errors/bad-request";
 import InternalServerError from "../errors/internal-server-error";
 import { compareSync } from "bcrypt";
@@ -61,4 +61,38 @@ const getRecipes: RequestHandler = async (req, res, next) => {
         return next(new InternalServerError("Server Error"));
     }
 };
-export { getRecipes }
+
+const createRecipe: RequestHandler = async (req, res, next) => {
+    const {recipe, user} = req.body
+
+    if(!recipe){
+        return next(new BadRequestError("Nem adtál meg receptet."))
+    }
+
+    recipe.user_id = user.id
+
+    if(!isRecipe(recipe)){
+        return next(new BadRequestError("Hibás recept attribútumok"))
+    }
+
+    try {
+        const createdRecipe = await Recipe.create(recipe)
+        res.status(201).json({created:createdRecipe})
+    } catch (error) {
+        console.error(error)
+        return next(new InternalServerError("Szerver hiba"));
+    }
+
+}
+export { getRecipes, createRecipe }
+
+function isRecipe(value: any):value is RecipeCreationAttributes {
+    return typeof
+    value === "object" &&
+    "title"in value && 
+    "description" in value &&
+    "preparation_time" in value &&
+    "difficulty_level" in value &&
+    "user_id" in value &&
+    "category_id" in value    
+}
