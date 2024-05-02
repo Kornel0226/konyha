@@ -1,38 +1,19 @@
 import { RequestHandler } from "express";
-import { Recipe, RecipeAttributes, RecipeCreationAttributes, RecipeModel } from "../models/Recipe";
 import BadRequestError from "../errors/bad-request";
 import InternalServerError from "../errors/internal-server-error";
-import { compareSync } from "bcrypt";
+import { SellabeFoodAttributes, SellableFood, SellableFoodModel } from "../models/SellableFood";
 import ForbiddenError from "../errors/forbidden-error";
-import { where } from "sequelize";
-import { Rating } from "../models/Rating";
-import NotFoundError from "../errors/not-found";
 
-const getRecipe: RequestHandler = async (req, res, next) => {
-    const { recipeId } = req.body;
-
-    if (!recipeId || isNaN(parseInt(recipeId))) {
-        return next(new BadRequestError("Invalid recipeId provided"))
-    }
-
-    try {
-        const recipe = Recipe.findOne({ where: { recipe_id: recipeId } })
-        return res.status(200).json({ recipe });
-    } catch (error) {
-        return next(new InternalServerError("Server Error"));
-    }
-}
-
-const getRecipes: RequestHandler = async (req, res, next) => {
+const getFoods: RequestHandler = async (req, res, next) => {
     const { fields, ...filters } = req.query;
-    const validProperties = Object.keys(Recipe.getAttributes());
+    const validProperties = Object.keys(SellableFood.getAttributes());
 
     console.log(filters);
 
     // Check if no fields or filters are provided
     if (!fields && Object.keys(filters).length === 0) {
         try {
-            const recipes = await Recipe.findAll();
+            const recipes = await SellableFood.findAll();
             return res.status(200).json({ recipes: recipes });
         } catch (error) {
             return next(new InternalServerError("Server Error"));
@@ -64,7 +45,7 @@ const getRecipes: RequestHandler = async (req, res, next) => {
     // Check if no filters are provided
     if (Object.keys(filters).length === 0) {
         try {
-            const recipes = await Recipe.findAll({ attributes: requestedFields });
+            const recipes = await SellableFood.findAll({ attributes: requestedFields });
             return res.status(200).json({ recipes: recipes });
         } catch (error) {
             return next(new InternalServerError("Server Error"));
@@ -74,29 +55,29 @@ const getRecipes: RequestHandler = async (req, res, next) => {
     // Process filters and retrieve recipes
     try {
         console.log(requestedFields);
-        const recipes = await Recipe.findAll({ where: filters, attributes: requestedFields.length > 0 ? requestedFields : undefined });
+        const recipes = await SellableFood.findAll({ where: filters, attributes: requestedFields.length > 0 ? requestedFields : undefined });
         return res.status(200).json({ recipes: recipes });
     } catch (error) {
         return next(new InternalServerError("Server Error"));
     }
 };
 
-const createRecipe: RequestHandler = async (req, res, next) => {
-    const { recipe, user } = req.body
+const createFood: RequestHandler = async (req, res, next) => {
+    const { food, user } = req.body
 
-    if (!recipe) {
-        return next(new BadRequestError("Nem adtál meg receptet."))
+    if (!food) {
+        return next(new BadRequestError("Nem adtál meg ételt."))
     }
 
-    recipe.user_id = user.id
+    food.user_id = user.id
 
-    if (!isRecipe(recipe)) {
-        return next(new BadRequestError("Hibás recept attribútumok"))
+    if (!isFood(food)) {
+        return next(new BadRequestError("Hibás étel attribútumok"))
     }
 
     try {
-        const createdRecipe = await Recipe.create(recipe)
-        res.status(201).json({ created: createdRecipe })
+        const createdFood = await SellableFood.create(food)
+        res.status(201).json({ created: createdFood })
     } catch (error) {
         console.error(error)
         return next(new InternalServerError("Szerver hiba"));
@@ -104,22 +85,22 @@ const createRecipe: RequestHandler = async (req, res, next) => {
 
 }
 
-const deleteRecipe: RequestHandler = async (req, res, next) => {
+const deleteFood: RequestHandler = async (req, res, next) => {
     const { user } = req.body
-    const { recipeId } = req.params
+    const { foodId } = req.params
 
-    if (!recipeId || isNaN(parseInt(recipeId))) {
+    if (!foodId || isNaN(parseInt(foodId))) {
         return next(new BadRequestError("No recipe id provided."))
     }
 
     try {
-        const recipe = await Recipe.findOne({ where: { recipe_id: recipeId } })
+        const food = await SellableFood.findOne({ where: { food_id: foodId } })
 
-        if (recipe) {
-            if (recipe.user_id !== user.id) {
+        if (food) {
+            if (food.user_id !== user.id) {
                 return next(new ForbiddenError("No access"))
             } else {
-                await recipe.destroy()
+                await food.destroy()
             }
         } else {
             return next(new BadRequestError("No recipe found with id"))
@@ -132,40 +113,40 @@ const deleteRecipe: RequestHandler = async (req, res, next) => {
     }
 }
 
-const updateRecipe: RequestHandler = async (req, res, next) => {
+const updateFood: RequestHandler = async (req, res, next) => {
     const { user } = req.body
-    const { recipeId } = req.params
+    const { foodId } = req.params
     const { fields } = req.body
 
-    if (!recipeId || isNaN(parseInt(recipeId))) {
-        return next(new BadRequestError("Invalid recipeId."))
+    if (!foodId || isNaN(parseInt(foodId))) {
+        return next(new BadRequestError("Invalid foodId."))
     }
 
     if (!fields) {
         return next(new BadRequestError("No fields sent to update"))
     }
 
-    let recipe: RecipeModel | null;
+    let food: SellableFoodModel | null;
 
     try {
-        recipe = await Recipe.findOne({ where: { recipe_id: recipeId } })
+        food = await SellableFood.findOne({ where: { food_id: foodId } })
 
-        if (recipe) {
-            if (recipe.user_id !== user.id) {
+        if (food) {
+            if (food.user_id !== user.id) {
                 return next(new ForbiddenError("No access"))
             }
         } else {
-            return next(new BadRequestError("No recipe found with id"))
+            return next(new BadRequestError("No food found with id"))
         }
     } catch (error) {
         return next(new InternalServerError("Server Error"))
     }
 
-    if (!recipe) {
+    if (!food) {
         return next(new InternalServerError("Server Error"))
     }
 
-    const validProperties = Object.keys(Recipe.getAttributes());
+    const validProperties = Object.keys(SellableFood.getAttributes());
     let validFields: any = {};
     let invalidFields: any = {};
 
@@ -184,14 +165,14 @@ const updateRecipe: RequestHandler = async (req, res, next) => {
     let updates: any = {}
 
     for (let key in validFields) {
-        if (validFields[key] !== recipe[key as keyof RecipeModel]) {
+        if (validFields[key] !== food[key as keyof SellableFoodModel]) {
             updates[key] = validFields[key]
         }
     }
 
     if (Object.getOwnPropertyNames(updates).length !== 0) {
         try {
-            await recipe.update(updates)
+            await food.update(updates)
             return res.status(202).json({ status: "updated" })
         } catch (error) {
             return next(new InternalServerError("Server Error"))
@@ -201,17 +182,15 @@ const updateRecipe: RequestHandler = async (req, res, next) => {
     return res.status(202).json({ status: "no changes" })
 }
 
+export { getFoods, createFood, deleteFood, updateFood }
 
 
-export { getRecipes, createRecipe, deleteRecipe, updateRecipe, getRecipe }
-
-function isRecipe(value: any): value is RecipeCreationAttributes {
+function isFood(value: any): value is SellabeFoodAttributes {
     return typeof
         value === "object" &&
         "title" in value &&
         "description" in value &&
-        "preparation_time" in value &&
-        "difficulty_level" in value &&
+        "price" in value &&
         "user_id" in value &&
         "category_id" in value
 }

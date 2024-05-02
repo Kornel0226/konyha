@@ -67,4 +67,4 @@ type SellabeFoodAttributes = {
 
 type SellableFoodCreationAttributes = Optional<SellabeFoodAttributes, "food_id">
 
-export { SellableFood, SellabeFoodAttributes, SellableFoodCreationAttributes }
+export { SellableFood, SellabeFoodAttributes, SellableFoodCreationAttributes, SellableFoodModel }

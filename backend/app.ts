@@ -15,6 +15,10 @@ import sequelizeErrorHandler from './middleware/sequalizeErrorhandler';
 import dotenv from "dotenv"
 import { recipeRouter } from './routes/recipes';
 import categoryRouter from './routes/category';
+import { foodRouter } from './routes/food';
+import recipeRatingRouter from './routes/recipeRating';
+import foodRatingRouter from './routes/foodRating';
+import ingredientRouter from './routes/ingredient';
 
 dotenv.config()
 
@@ -51,6 +55,10 @@ app.get("/", async (req, res) => {
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/recipes", recipeRouter)
 app.use("/api/v1/categories", categoryRouter)
+app.use("/api/v1/foods", foodRouter)
+app.use("/api/v1/recipe_ratings", recipeRatingRouter)
+app.use("/api/v1/food_ratings", foodRatingRouter)
+app.use("/api/v1/ingredients", ingredientRouter);
 app.use(sequelizeErrorHandler);
 app.use(errorhandler);
 

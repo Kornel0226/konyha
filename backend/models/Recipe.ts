@@ -71,4 +71,4 @@ type RecipeAttributes = {
 
 type RecipeCreationAttributes = Optional<RecipeAttributes, "recipe_id">
 
-export { Recipe, RecipeAttributes, RecipeCreationAttributes }
+export { Recipe, RecipeAttributes, RecipeCreationAttributes, RecipeModel }
