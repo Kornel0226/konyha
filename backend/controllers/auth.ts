@@ -115,7 +115,7 @@ const login: RequestHandler = async (req, res, next) => {
     }
     const jwtSecret = process.env.JWT_SECRET as string;
     const token = Jwt.sign({ id: user.user_id, username: user.username }, jwtSecret, { expiresIn: "1d" })
-    res.json({ token: token })
+    res.json({ token: token, username: user.username })
 }
 
 export { register, login };

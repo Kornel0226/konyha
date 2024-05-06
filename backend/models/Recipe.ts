@@ -3,7 +3,7 @@ import { sequelize } from "../config/db_connect";
 import { User } from "./User";
 import { Category } from "./Category";
 import { Ingredient } from "./Ingredient";
-import { Rating } from "./Rating";
+
 
 class RecipeModel extends Model<RecipeAttributes, RecipeCreationAttributes> {
     recipe_id!: number
@@ -13,6 +13,7 @@ class RecipeModel extends Model<RecipeAttributes, RecipeCreationAttributes> {
     difficulty_level!: string
     user_id!: number
     category_id!: number
+    image?: string
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -27,6 +28,9 @@ const Recipe = RecipeModel.init({
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: true
+    },
+    image: {
+        type: DataTypes.TEXT
     },
     description: {
         type: DataTypes.TEXT,
@@ -61,6 +65,7 @@ type RecipeAttributes = {
     recipe_id: number
     title: string
     description: string
+    image?: string
     preparation_time: number
     difficulty_level: string
     user_id: number

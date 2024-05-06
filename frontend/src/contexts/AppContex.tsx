@@ -1,24 +1,41 @@
-import React, { createContext, FC, ReactNode, useState } from "react";
+import { createContext, FC, ReactNode, useState, useCallback } from "react";
 
-type Auth = undefined | "login" | "register" | "loggedIn"
+type UserType = {
+    username: string,
+    token: string
+}
 
 type ContextType = {
-    auth: Auth,
-    setAuth: React.Dispatch<React.SetStateAction<Auth>>
+    user: UserType | null
+    loginUser: (username: string, token: string) => void
+    recipeId: number | undefined,
+    setRecipeId: (id: number) => void
 }
 
 export const AppContext = createContext<ContextType>({
-    auth: undefined,
-    setAuth: () => { }
+    user: null,
+    loginUser: () => { },
+    recipeId: undefined,
+    setRecipeId: () => { }
 })
 
 const AppContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
-    const [Auth, setAuth] = useState<Auth>(undefined)
+    const [user, setUser] = useState<UserType | null>(null)
+    const [recipeId, setRecipeId] = useState<number | undefined>(undefined)
 
+    const loginUser = useCallback((username: string, token: string) => {
+        setUser({ username: username, token: token })
+    }, [])
+
+    const setRecipe = (id: number) => {
+        setRecipeId(id)
+    }
     const ctxValue: ContextType = {
-        auth: Auth,
-        setAuth: setAuth
+        user: user,
+        loginUser: loginUser,
+        recipeId: recipeId,
+        setRecipeId: setRecipe
     }
 
     return <AppContext.Provider value={ctxValue}>

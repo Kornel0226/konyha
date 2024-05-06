@@ -6,6 +6,8 @@ import InternalServerError from "../errors/internal-server-error";
 import { Recipe } from "../models/Recipe";
 import { where } from "sequelize";
 import ForbiddenError from "../errors/forbidden-error";
+import { AuthUser } from "../middleware/authentication";
+import UnauthorizedError from "../errors/unauthorizedError";
 
 const getIngredient: RequestHandler = async (req, res, next) => {
     const { ingredientId } = req.params;
@@ -56,7 +58,13 @@ const getIngredients: RequestHandler = async (req, res, next) => {
 }
 
 const createIngredient: RequestHandler = async (req, res, next) => {
-    const { ingredient, user } = req.body
+    const { ingredient } = req.body
+
+    const user = req.user as AuthUser
+
+    if (!user) {
+        return next(new UnauthorizedError("Acces Deined"));
+    }
 
     if (!ingredient) {
         return next(new BadRequestError("Nem adtál meg hozzávalót."))
@@ -86,9 +94,17 @@ const createIngredient: RequestHandler = async (req, res, next) => {
 
 }
 
+
+
 const updateIngredient: RequestHandler = async (req, res, next) => {
     const { ingredientId } = req.params;
-    const { user, fields } = req.body;
+    const { fields } = req.body;
+
+    const user = req.user as AuthUser
+
+    if (!user) {
+        return next(new UnauthorizedError("Acces Deined"));
+    }
 
     if (!ingredientId || isNaN(parseInt(ingredientId))) {
         return next(new BadRequestError("Invalid ratingId"));
@@ -134,8 +150,14 @@ const updateIngredient: RequestHandler = async (req, res, next) => {
 };
 
 const deleteIngredient: RequestHandler = async (req, res, next) => {
-    const { user } = req.body;
+    ;
     const { ingredientId } = req.params;
+
+    const user = req.user as AuthUser
+
+    if (!user) {
+        return next(new UnauthorizedError("Acces Deined"));
+    }
 
     if (!ingredientId || isNaN(parseInt(ingredientId))) {
         return next(new BadRequestError("No ingredient id provided."));

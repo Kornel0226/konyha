@@ -2,11 +2,18 @@ import { RequestHandler } from "express"
 import UnauthorizedError from "../errors/unauthorizedError";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import InternalServerError from '../errors/internal-server-error';
+import { IncomingHttpHeaders } from "http2";
+// Define a custom interface that extends Express's Request interface
+
+export type AuthUser = {
+    id: number,
+    username: string
+}
 
 const authentication: RequestHandler = async (req, res, next) => {
     const authHeader = req.headers.authorization
 
-    if (!authHeader || !authHeader.startsWith("Bearer ") !){
+    if (!authHeader || !authHeader.startsWith("Bearer ")!) {
         return next(new UnauthorizedError("Not logged in!"))
     }
 
@@ -14,28 +21,28 @@ const authentication: RequestHandler = async (req, res, next) => {
 
     const secret = process.env.JWT_SECRET
 
-    if (!secret){
+    if (!secret) {
         return next(new InternalServerError("Opss, something unexpected happened."))
     }
 
     let decodedToken: JwtPayload | string;
     try {
-        decodedToken = jwt.verify(token, secret)     
+        decodedToken = jwt.verify(token, secret)
     } catch (error) {
         return next(new UnauthorizedError("You have bo access!"))
     }
 
-    if (!isJwtPayload(decodedToken)){
+    if (!isJwtPayload(decodedToken)) {
         return next(new UnauthorizedError("You have no access!"))
     }
 
-    const {id, username} = decodedToken
+    const { id, username } = decodedToken
 
     if (!id || !username) {
         return next(new UnauthorizedError("You have no access!"))
     }
 
-    req.body.user = {
+    req.user = {
         id, username
     }
 

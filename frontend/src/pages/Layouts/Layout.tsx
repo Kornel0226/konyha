@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom"
-import headerIMG from "../assets/Fejléc.jpg"
+import headerIMG from "../../assets/Fejléc.jpg"
 
-import logoIMG from "../assets/Logo.png"
-import MainNav from "../components/MainNavigation"
+import logoIMG from "../../assets/Logo.png"
+import MainNav from "../../components/MainNavigation"
 
 
 const Layout = () => {
@@ -17,7 +17,7 @@ const Layout = () => {
             </div>
         </header>
         <MainNav />
-        <main className="min-h-[82vh] min-w-[100%] bg-orange-500 border-2 border-black flex justify-center items-center">
+        <main className=" min-w-[100vw] h-max min-h-screen bg-orange-500 border-2 border-black flex justify-center items-center">
             <Outlet />
         </main>
     </>

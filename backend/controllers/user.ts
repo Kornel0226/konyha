@@ -3,7 +3,8 @@ import { User, UserModel } from "../models/User";
 import BadRequestError from "../errors/bad-request";
 import InternalServerError from "../errors/internal-server-error";
 import NotFoundError from "../errors/not-found";
-import { where } from "sequelize";
+import { AuthUser } from "../middleware/authentication";
+import UnauthorizedError from "../errors/unauthorizedError";
 // Userrel kapcsolatos endpointok
 
 // Egy felhasználó lekérése id (user_id) alapjan
@@ -56,16 +57,21 @@ const getUser: RequestHandler = async (req, res, next) => {
 };
 
 const getLoggedUser: RequestHandler = async (req, res, next) => {
-    const { id } = req.body.user;
     const { fields } = req.query;
+
+    const au = req.user as AuthUser
+
+
+    if (!au) {
+        return next(new UnauthorizedError("Acces Deined"));
+    }
+
+    const id = au.id
 
     if (!id) {
         return next(new BadRequestError("No id provided!"));
     }
 
-    if (isNaN(parseInt(id))) {
-        return next(new BadRequestError("Not valid id"));
-    }
 
     let requestedFields: string[] | undefined;
 
@@ -88,7 +94,7 @@ const getLoggedUser: RequestHandler = async (req, res, next) => {
 
     try {
         user = await User.findOne({
-            where: { user_id: parseInt(id) },
+            where: { user_id: id },
             attributes: requestedFields ? requestedFields : { exclude: ["password"] },
         });
     } catch (error) {

@@ -1,12 +1,10 @@
-import express, { json } from 'express';
+import express, { json, Request } from 'express';
+import cors from "cors"
 import { dbConnect } from './config/db_connect';
 import { User } from './models/User';
 import { Model, Sequelize } from 'sequelize';
 import { Recipe } from './models/Recipe';
-import { Rating } from './models/Rating';
 import { Ingredient } from './models/Ingredient';
-import { SellableFoodRating } from './models/SellableFoodRating';
-import { SellableFood } from './models/SellableFood';
 import { Category } from './models/Category';
 import userRouter from './routes/user';
 import bodyParser from 'body-parser';
@@ -15,15 +13,28 @@ import sequelizeErrorHandler from './middleware/sequalizeErrorhandler';
 import dotenv from "dotenv"
 import { recipeRouter } from './routes/recipes';
 import categoryRouter from './routes/category';
-import { foodRouter } from './routes/food';
-import recipeRatingRouter from './routes/recipeRating';
-import foodRatingRouter from './routes/foodRating';
 import ingredientRouter from './routes/ingredient';
+import multer from "multer"
+import * as fs from "fs"
+import passport from "passport"
+import path from 'path';
 
 dotenv.config()
 
 const app = express();
 export let database: Sequelize;
+
+const uploadFolders = ['uploads/foods', 'uploads/recipes', 'uploads/userpictures'];
+
+// Create the folders if they don't exist
+uploadFolders.forEach(folder => {
+    if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder, { recursive: true });
+    }
+});
+
+app.use(express.urlencoded({ extended: true }));
+
 
 const startServer = async () => {
     try {
@@ -37,9 +48,21 @@ const startServer = async () => {
         console.error("Failed to start the server:", error);
     }
 };
+app.use(passport.initialize())
 app.use(express.json());
-//app.use(express.urlencoded({ extended: false }))
-app.use(express.urlencoded({ extended: true }));
+app.use(cors())
+
+
+// Serve images from the 'uploads/foods' directory
+app.use('/uploads/foods', express.static('./uploads/foods'));
+
+// Serve images from the 'uploads/recipes' directory
+app.use('/uploads/recipes', express.static('./uploads/recipes'));
+
+// Serve images from the 'uploads/userpictures' directory
+app.use('/uploads/userpictures', express.static('./uploads/userpictures'));
+
+
 
 app.get("/", async (req, res) => {
     try {
@@ -55,11 +78,10 @@ app.get("/", async (req, res) => {
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/recipes", recipeRouter)
 app.use("/api/v1/categories", categoryRouter)
-app.use("/api/v1/foods", foodRouter)
-app.use("/api/v1/recipe_ratings", recipeRatingRouter)
-app.use("/api/v1/food_ratings", foodRatingRouter)
 app.use("/api/v1/ingredients", ingredientRouter);
 app.use(sequelizeErrorHandler);
 app.use(errorhandler);
 
 startServer();
+
+

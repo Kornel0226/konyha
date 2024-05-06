@@ -1,9 +1,6 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../config/db_connect';
-import { Recipe } from './Recipe';
-import { SellableFood } from './SellableFood';
-import { Rating } from './Rating';
-import { SellableFoodRating } from './SellableFoodRating';
+
 
 class UserModel extends Model<UserAttributes, UserCreationAttributes> {
     user_id!: number;
@@ -26,9 +23,6 @@ const User = UserModel.init({
         type: DataTypes.STRING(50),
         unique: true,
         allowNull: false,
-        validate: {
-            is: /^[a-zA-Z0-9_]{3,20}$/,
-        }
     },
     email: {
         type: DataTypes.STRING(100),
@@ -43,7 +37,7 @@ const User = UserModel.init({
         allowNull: false
     },
     profile_picture: {
-        type: DataTypes.STRING(255)
+        type: DataTypes.BLOB
     },
     is_admin: {
         type: DataTypes.BOOLEAN,

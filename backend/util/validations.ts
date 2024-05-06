@@ -5,7 +5,7 @@ const isValidPassword = (password: string): boolean => {
 };
 
 const isValidUserName = (username: string) => {
-    const userNameRegex = /^[a-zA-Z0-9_]{3,20}$/
+    const userNameRegex = /^[a-zA-Z0-9_ÁáÉéÍíÓóÖöŐőÚúÜüŰű]{3,20}$/;
     return userNameRegex.test(username) && username.length >= 4;
 }
 

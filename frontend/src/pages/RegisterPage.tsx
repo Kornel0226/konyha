@@ -3,25 +3,19 @@ import Input from "../components/Input";
 import { SyntheticEvent, useState } from "react";
 import { validateEmail, validatePassword } from "../util/validation";
 import { useRef } from "react";
+import register from "../requests/register";
 
 type Validation = {
     email: {
         isValid: boolean,
         message: string
     }
-    firstName: {
+    username: {
         isValid: boolean,
         message: string
     }
-    lastName: {
-        isValid: boolean,
-        message: string
-    }
+
     password: {
-        isValid: boolean,
-        message: string
-    }
-    birthday: {
         isValid: boolean,
         message: string
     }
@@ -35,11 +29,7 @@ const Register = () => {
             isValid: true,
             message: ""
         },
-        firstName: {
-            isValid: true,
-            message: ""
-        },
-        lastName: {
+        username: {
             isValid: true,
             message: ""
         },
@@ -47,39 +37,22 @@ const Register = () => {
             isValid: true,
             message: ""
         },
-        birthday: {
-            isValid: true,
-            message: ""
-        }
+
     })
 
-    const firstName = useRef<HTMLInputElement>(null)
-    const lastName = useRef<HTMLInputElement>(null)
+    const username = useRef<HTMLInputElement>(null)
     const email = useRef<HTMLInputElement>(null)
     const password = useRef<HTMLInputElement>(null)
     const password2 = useRef<HTMLInputElement>(null)
-    const birthDate = useRef<HTMLInputElement>(null)
 
     const handleSubmit = (event: SyntheticEvent) => {
 
         const validationCopy = { ...validation }
 
-        if (!firstName.current?.value) {
-            validationCopy.firstName = { isValid: false, message: "Mezo kitoltese kotelezo!" }
+        if (!username.current?.value) {
+            validationCopy.username = { isValid: false, message: "Mezo kitoltese kotelezo!" }
         } else {
-            validationCopy.firstName = { isValid: true, message: "" }
-        }
-
-        if (!lastName.current?.value) {
-            validationCopy.lastName = { isValid: false, message: "Mezo kitoltese kotelezo!" }
-        } else {
-            validationCopy.lastName = { isValid: true, message: "" }
-        }
-
-        if (!birthDate.current?.value) {
-            validationCopy.birthday = { isValid: false, message: "Mezo kitoltese kotelezo!" }
-        } else {
-            validationCopy.birthday = { isValid: true, message: "" }
+            validationCopy.username = { isValid: true, message: "" }
         }
 
         if (!email.current?.value) {
@@ -114,11 +87,9 @@ const Register = () => {
                 <div className="mb-8 flex flex-col md:flex-row md:gap-12">
                     <div>
                         <Input name="email" type="email" ref={email} label="Email" error={validation.email.isValid ? undefined : validation.email.message} />
-                        <Input name="firstName" ref={firstName} type="text" label="Vezetéknév" error={validation.firstName.isValid ? undefined : validation.firstName.message} />
-                        <Input name="lastName" ref={lastName} type="text" label="Keresztnév" error={validation.lastName.isValid ? undefined : validation.lastName.message} />
+                        <Input name="username" ref={username} type="text" label="Felhasználónév:" error={validation.username.isValid ? undefined : validation.username.message} />
                     </div>
                     <div>
-                        <Input name="birthDate" ref={birthDate} type="date" label="Szuletesi datum" error={validation.birthday.isValid ? undefined : validation.birthday.message} />
                         <Input name="password" ref={password} type="password" label="Jelszó" error={validation.password.isValid ? undefined : validation.password.message} />
                         <Input name="passwordx" ref={password2} type="password" label="Jelszó újra" />
                     </div>
@@ -137,22 +108,37 @@ const regAction = async ({ request }: { request: Request }) => {
     const formData = await request.formData();
 
     const data = {
-        firstName: formData.get("firstName"),
-        lastName: formData.get("lastName"),
+        username: formData.get("username"),
         email: formData.get("email"),
-        birthDate: formData.get("birthDate"),
         password: formData.get("password")
     }
 
-    if (!data.firstName || !data.lastName || !data.email || !data.birthDate || !data.password) {
+    if (!data.username || !data.email || !data.password) {
         return null;
     }
 
-    console.log(data);
-    return null
+    const user = {
+        username: data.username.toString(),
+        email: data.email.toString(),
+        password: data.password.toString()
+    }
+
+    try {
+        console.log(user)
+        const response = await register(user);
+
+        if (response.status < 300 && response.status >= 200) {
+            console.log("sikeres regisztracio")
+            return null
+        }
+    } catch (error) {
+        console.log(error)
+        return null
+    }
 }
 
 
 export default Register;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { regAction }

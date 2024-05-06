@@ -1,7 +1,7 @@
 import { DataType, DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../config/db_connect";
-import { Recipe } from "./Recipe";
-import { SellableFood } from "./SellableFood";
+
+
 
 class CategoryModel extends Model<CategoryAttributes, CategoryCreationAttributes> {
     category_id!: number
