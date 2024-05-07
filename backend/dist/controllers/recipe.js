@@ -202,7 +202,13 @@ const createRecipe = async (req, res, next) => {
         description: req.body.description,
         user_id: user.id
     };
-    const ingredients = JSON.parse(req.body.ingredients);
+    let ingredients;
+    try {
+        ingredients = JSON.parse(req.body.ingredients);
+    }
+    catch (error) {
+        return next(new bad_request_1.default("Hibás hozzávlók"));
+    }
     if (!Array.isArray(ingredients)) {
         return next(new bad_request_1.default("Ingredients must be an array"));
     }
@@ -228,6 +234,7 @@ const createRecipe = async (req, res, next) => {
         const createdRecipe = await Recipe_1.Recipe.create(recipe);
         const modifiedIngredients = ingredients.map(ingredient => { return { ...ingredient, recipe_id: createdRecipe.recipe_id }; });
         await Ingredient_1.Ingredient.bulkCreate(modifiedIngredients);
+        return res.status(201);
     }
     catch (error) {
         console.error(error);
@@ -281,7 +288,6 @@ const updateRecipe = async (req, res, next) => {
     try {
         const recipeToPatch = await Recipe_1.Recipe.findOne({ where: { recipe_id: recipeId } });
         if (!recipeToPatch) {
-            console.log("asd");
             return next(new bad_request_1.default("No recipe found with id"));
         }
         if (recipeToPatch.user_id !== user.id) {

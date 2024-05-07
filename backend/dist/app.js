@@ -7,7 +7,6 @@ exports.database = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const db_connect_1 = require("./config/db_connect");
-const User_1 = require("./models/User");
 const user_1 = __importDefault(require("./routes/user"));
 const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
 const sequalizeErrorhandler_1 = __importDefault(require("./middleware/sequalizeErrorhandler"));
@@ -41,16 +40,6 @@ app.use('/uploads/foods', express_1.default.static('./uploads/foods'));
 app.use('/uploads/recipes', express_1.default.static('./uploads/recipes'));
 // Serve images from the 'uploads/userpictures' directory
 app.use('/uploads/userpictures', express_1.default.static('./uploads/userpictures'));
-app.get("/", async (req, res) => {
-    try {
-        const recipe = await User_1.User.findOne({ where: { user_id: 2 } });
-        res.json({ "ok": true });
-    }
-    catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Failed to fetch users" });
-    }
-});
 //Routerek
 app.use("/api/v1/users", user_1.default);
 app.use("/api/v1/recipes", recipes_1.recipeRouter);

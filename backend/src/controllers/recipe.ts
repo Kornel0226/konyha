@@ -213,7 +213,13 @@ const createRecipe: RequestHandler = async (req, res, next) => {
         user_id: user.id
     }
 
-    const ingredients = JSON.parse(req.body.ingredients)
+    let ingredients;
+    try {
+        ingredients = JSON.parse(req.body.ingredients)
+    } catch (error) {
+        return next(new BadRequestError("Hibás hozzávlók"))
+    }
+
 
 
     if (!Array.isArray(ingredients)) {
@@ -252,6 +258,8 @@ const createRecipe: RequestHandler = async (req, res, next) => {
         const modifiedIngredients = ingredients.map(ingredient => { return { ...ingredient, recipe_id: createdRecipe.recipe_id } })
 
         await Ingredient.bulkCreate(modifiedIngredients)
+
+        return res.status(201)
     } catch (error) {
         console.error(error)
         return next(new InternalServerError("Szerver hiba"));
@@ -313,7 +321,6 @@ const updateRecipe: RequestHandler = async (req, res, next) => {
         const recipeToPatch = await Recipe.findOne({ where: { recipe_id: recipeId } });
 
         if (!recipeToPatch) {
-            console.log("asd")
             return next(new BadRequestError("No recipe found with id"));
         }
 

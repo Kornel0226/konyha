@@ -57,16 +57,6 @@ app.use('/uploads/recipes', express.static('./uploads/recipes'));
 app.use('/uploads/userpictures', express.static('./uploads/userpictures'));
 
 
-
-app.get("/", async (req, res) => {
-    try {
-        const recipe = await User.findOne({ where: { user_id: 2 } });
-        res.json({ "ok": true });
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        res.status(500).json({ error: "Failed to fetch users" });
-    }
-});
 //Routerek
 
 app.use("/api/v1/users", userRouter);
