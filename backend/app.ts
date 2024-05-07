@@ -48,7 +48,6 @@ const startServer = async () => {
         console.error("Failed to start the server:", error);
     }
 };
-app.use(passport.initialize())
 app.use(express.json());
 app.use(cors())
 

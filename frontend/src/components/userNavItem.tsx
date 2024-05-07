@@ -1,12 +1,8 @@
 import { NavLink } from "react-router-dom"
-import { useContext } from "react"
-import { AppContext } from "../contexts/AppContex"
 
 const UserNavItem = () => {
 
-    const { user } = useContext(AppContext);
-
-    return <li><NavLink to="/profil">{user?.username}</NavLink></li>
+    return <li><NavLink to="/profil">Profilom</NavLink></li>
 
 }
 

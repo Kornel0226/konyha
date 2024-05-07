@@ -11,15 +11,18 @@ import RecipeCreation from "../components/Recipes/RecipeCreation";
 import EditRecipePage from "../pages/EditRecipePage";
 import RecipeDetailsPage from "../pages/RecipeDetailsPage";
 import Recipes from "../pages/RecipesPage";
+import ErrorModal from "../components/ErrorModal";
+import ErrorPage from "../pages/ErrorPage";
 
 
 const AppRouter = () => {
-    const { user } = useContext(AppContext);
+    const { user, isModalOpen } = useContext(AppContext);
 
     const router = createBrowserRouter([
         {
             path: "/",
             element: <Layout />,
+            errorElement: <ErrorPage />,
             action: loginAction,
             children: [
                 { index: true, element: <h1>Start</h1> },
@@ -56,9 +59,11 @@ const AppRouter = () => {
     ]);
 
     return (
-        <RouterProvider router={router}>
-            {/* Your other components */}
-        </RouterProvider>
+        <>
+            <RouterProvider router={router}>
+            </RouterProvider>
+            {isModalOpen && <ErrorModal />}
+        </>
     );
 };
 

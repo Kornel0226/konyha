@@ -78,4 +78,35 @@ const getAuthenticatedUserRecipes = async (token: string) => {
     }
 }
 
-export { getAuthenticatedUser, getAuthenticatedUserRecipes }
+const updateUser = async (token: string, fields: object) => {
+    try {
+        console.log(fields)
+        const response = await axios.patch("http://localhost:5000/api/v1/users/user", fields, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
+
+        return response.data.recipes;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const axiosError = error as AxiosError<ErrorResponse>;
+            if (axiosError.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw axiosError.response.data;
+            } else if (axiosError.request) {
+                // The request was made but no response was received
+                throw new Error('No response received from the server.');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw new Error('Error setting up the request.');
+            }
+        } else {
+            // Handle other types of errors
+            throw new Error('Unexpected error occurred.');
+        }
+    }
+}
+
+export { getAuthenticatedUser, getAuthenticatedUserRecipes, updateUser }

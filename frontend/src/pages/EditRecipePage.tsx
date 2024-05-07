@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState, useRef, FC, useEffect } from "react";
 import { getRecipe, RecipeCreationType, updateRecipe } from "../requests/recipes";
-import { Form, useParams } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import RecipeCreationInput from "../components/Recipes/RecipeCreationInput";
 import ImageUploader from "../components/Recipes/ImageUploader";
 import CategorySelection from "../components/Category/CategorySelection";
@@ -13,15 +13,12 @@ import { AppContext } from "../contexts/AppContex";
 
 
 const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [imageUrl, setSelectedImageUrl] = useState<string | null>(null);
-    const [error, setError] = useState<string | null | object>(null);
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [recipeData, setRecipeData] = useState<RecipeCreationType | null>(null);
     const [ingredients, setIngredients] = useState<Ingredient[]>([])
-    const { recipeId } = useContext(AppContext)
-
-
+    const { recipeId, openModal } = useContext(AppContext)
+    const navigate = useNavigate();
     const recipe_id = useRef<number>();
 
     useEffect(() => {
@@ -49,7 +46,6 @@ const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
-            setSelectedImage(file);
             const imageUrl = URL.createObjectURL(file);
             setSelectedImageUrl(imageUrl);
         }
@@ -64,7 +60,6 @@ const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
         event.preventDefault();
         const formElement = event.target as HTMLFormElement;
         const formData = new FormData(formElement);
-
         const title = formData.get("title") as string;
         const preparation_time = formData.get("preparation_time") as string;
         const difficulty_level = formData.get("difficulty_level") as "EASY" | "MEDIUM" | "HARD";
@@ -72,17 +67,18 @@ const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
         const description = formData.get("description") as string;
 
         if (!title || !preparation_time || !difficulty_level || !category_id || !description) {
-            console.log("Missing data");
+            openModal("Üres mező")
             return;
         }
+
 
         formData.append('ingredients', JSON.stringify(ingredients))
 
         try {
-            const response = await updateRecipe(token, recipe_id.current, formData); // Send formData containing image
-            console.log(response);
+            await updateRecipe(token, recipe_id.current, formData); // Send formData containing image
+            navigate("/profil/recepteim")
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     };
 

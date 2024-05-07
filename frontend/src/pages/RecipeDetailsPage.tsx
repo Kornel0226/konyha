@@ -10,9 +10,8 @@ const RecipeDetailsPage = () => {
     const recipe_id = params.recipeId;
     const [recipe, setRecipe] = useState<Recipe | undefined>();
     const [category, setCategory] = useState<{ name: string } | undefined>();
-    const [error, setError] = useState<Error | undefined>(undefined);
+    const [error, setError] = useState<Error | object | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(true);
-    const [image, setimage] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         async function fetchRecipe() {
@@ -29,7 +28,7 @@ const RecipeDetailsPage = () => {
                 }
 
             } catch (error) {
-                setError(error);
+                setError({ error: error });
             }
             setIsLoading(false);
         }
@@ -61,20 +60,20 @@ const RecipeDetailsPage = () => {
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div>Error: {"Váratlan hiba tortent"}</div>;
     }
 
 
 
     return (
-        <div className="bg-orange-300 rounded-md w-full h-full flex flex-auto justify-center p-8">
+        <div className="bg-orange-300 rounded-md w-full min-h-[100vh] flex flex-auto justify-center p-8">
             {recipe && (
                 <div className="flex flex-col md:flex-row justify-between w-full">
                     <div className="flex flex-col md:w-2/3">
                         <h2 className="text-4xl lg:text-6xl font-extrabold text-orange-700 mb-8">{recipe.title}</h2>
                         <p className="text-3xl text-orange-700 mb-10">{category && category.name}</p>
                         <div className=" w-full lg:w-[50%]">
-                            <Image size="400px" img={recipe.image} />
+                            <Image img={recipe.image} />
                         </div>
                         <p className="text-2xl text-white mb-4">Elkészítési idő: {recipe.preparation_time} perc</p>
                         <p className="text-2xl text-white mb-4">Nehézség: {difficulty(recipe)}</p>

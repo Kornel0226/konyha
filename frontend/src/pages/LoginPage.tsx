@@ -2,20 +2,29 @@ import { Form, useActionData } from "react-router-dom";
 import Input from "../components/Input";
 import { useNavigate } from "react-router-dom";
 import login from "../requests/login";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../contexts/AppContex";
 
 const Login = () => {
 
-    const { loginUser } = useContext(AppContext)
+    const { loginUser, openModal } = useContext(AppContext)
     const user = useActionData() as { username: string, token: string }
+    const error = useActionData() as Error
+    const [actionState, setActionState] = useState<unknown>()
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
-            loginUser(user.username, user.token);
+        if (actionState !== error) {
+            if (user && user.username && user.token) {
+                loginUser(user.username, user.token);
+                navigate("/receptek")
+            }
+            else if (error) {
+                openModal("Hibás belépési adatok.")
+            }
+            setActionState(error)
         }
-    }, [user, loginUser]);
+    }, [user, loginUser, navigate, error, openModal, actionState]);
 
     return <>
         <div className={`text-black h-max md:border-2 border-black p-10 rounded-lg shadow-lg md:shadow-black`}>
@@ -33,7 +42,8 @@ const Login = () => {
     </>
 }
 
-const loginAction = async ({ request }: { request: Request }) => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const loginAction = async ({ request }: { request: Request }) => {
 
     const formData = await request.formData()
 
@@ -53,11 +63,9 @@ const loginAction = async ({ request }: { request: Request }) => {
         const user = await login(userData)
         return user
     } catch (error) {
-        console.log(error)
-        return null
+        return error as Error;
     }
 }
 
 export default Login;
 
-export { loginAction };

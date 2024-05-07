@@ -4,7 +4,7 @@ import { fetchImageAsBlob } from "../../requests/image";
 
 
 
-const Image: FC<{ img: string, size: string }> = ({ img, size }) => {
+const Image: FC<{ img: string }> = ({ img }) => {
 
     const [blob, setBlob] = useState<Blob | null>(null)
     const [isLoading, setIsloadin] = useState(true)
@@ -31,7 +31,8 @@ const Image: FC<{ img: string, size: string }> = ({ img, size }) => {
 
     return <>
         {isLoading && <p>Loading...</p>}
-        {img && <img src={img} alt="recept" className={`w-full h-[80%]`}></img>}
+        {img && <img src={img} alt="recept" className={`w-[100%] md:h-[15vh] lg:h-[80%]`}></img>}
+        {error && undefined}
     </>;
 };
 

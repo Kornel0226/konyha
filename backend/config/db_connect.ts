@@ -2,10 +2,10 @@ import { Sequelize } from "sequelize";
 
 type DBConfig = {
     username: string;
-    password: string;
+    password?: string; // Include password field for production
     database: string;
     host: string;
-    dialect: 'mssql' | 'mysql' | 'postgres' | 'sqlite'; // Add other valid dialects as needed
+    dialect: 'mysql'; // MySQL dialect
 }
 
 const config: {
@@ -13,22 +13,21 @@ const config: {
     production: DBConfig;
 } = {
     "development": {
-        "username": "Admin",
-        "password": "2002jan26",
-        "database": "KozossegiKonyha",
+        "username": "root",
+        "database": "kozossegikonyha",
         "host": "localhost",
-        "dialect": "mssql"
+        "dialect": "mysql"
     },
     "production": {
         "username": "your_production_username",
         "password": "your_production_password",
         "database": "your_production_database",
         "host": "your_production_host",
-        "dialect": "mssql"
+        "dialect": "mysql" // Use MySQL dialect for production as well
     }
 };
 
-const dbConfig = config.development
+const dbConfig = config.development;
 
 const dbConnect = async () => {
     try {
@@ -37,9 +36,10 @@ const dbConnect = async () => {
             dialect: dbConfig.dialect
         });
         await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
         return sequelize;
     } catch (error) {
-        throw error;
+        throw new Error(`Unable to connect to the database: ${error}`);
     }
 }
 
@@ -49,4 +49,3 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.p
 });
 
 export { dbConnect, sequelize };
-

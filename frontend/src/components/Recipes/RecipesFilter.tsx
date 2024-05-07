@@ -104,9 +104,9 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
         <>
             {!isMobile && (
                 <Form onSubmit={handleSubmit} className="bg-green-800 w-[20%] h-[100vh]">
-                    <h1 className="text-3xl font-bold p-3 border-l-2 border-b-2 border-black">Szűrők</h1>
+                    <h1 className="text-3xl font-bold p-3 border-b-2 border-r-2 border-black">Szűrők</h1>
                     <ul className="flex flex-col text-3xl">
-                        <li className="p-4 border-2 border-t-0 border-black">
+                        <li className="p-4 border-2 border-t-0 border-l-0 border-black">
                             <div className="flex flex-col gap-5">
                                 <label htmlFor="diff">Nehézség</label>
                                 <select name="difficulty_level" className="bg-white text-black" id="diff">
@@ -117,7 +117,7 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
                                 </select>
                             </div>
                         </li>
-                        <li className="p-4 border-2 border-t-0 border-black">
+                        <li className="p-4 border-2 border-t-0 border-l-0 border-black">
                             <div className="flex flex-col gap-5">
                                 <label htmlFor="cat">Kategória</label>
                                 <select name="category" className="bg-white text-black w-full" id="cat">
@@ -126,7 +126,7 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
                                 </select>
                             </div>
                         </li>
-                        <li className="p-4 border-2 border-t-0 border-black">
+                        <li className="p-4 border-2 border-t-0 border-l-0 border-black">
                             <div>
                                 <h2>Elkészítési ido</h2>
                                 <input type="checkbox" onChange={handleOnCheckChange} />

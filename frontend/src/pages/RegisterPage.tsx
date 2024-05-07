@@ -5,7 +5,7 @@ import { validateEmail, validatePassword } from "../util/validation";
 import { useRef } from "react";
 import register from "../requests/register";
 
-type Validation = {
+export type Validation = {
     email: {
         isValid: boolean,
         message: string
@@ -50,13 +50,13 @@ const Register = () => {
         const validationCopy = { ...validation }
 
         if (!username.current?.value) {
-            validationCopy.username = { isValid: false, message: "Mezo kitoltese kotelezo!" }
+            validationCopy.username = { isValid: false, message: "Mező kitöltése kötelező!" }
         } else {
             validationCopy.username = { isValid: true, message: "" }
         }
 
         if (!email.current?.value) {
-            validationCopy.email = { isValid: false, message: "Mezo kitoltese kotelezo!" }
+            validationCopy.email = { isValid: false, message: "Mező kitöltése kötelező!" }
         }
         else {
             const value = email.current.value || ""
@@ -64,7 +64,10 @@ const Register = () => {
         }
 
         if (!password.current?.value) {
-            validationCopy.password = { isValid: false, message: "Mezo kitoltese kotelezo!" }
+            validationCopy.password = { isValid: false, message: "Mező kitöltése kötelező!" }
+        }
+        else if (password.current.value !== password2.current?.value) {
+            validationCopy.password = { isValid: false, message: "A jelszavak nem egyeznek!!" }
         }
         else {
             const value = password.current.value || ""

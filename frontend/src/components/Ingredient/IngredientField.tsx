@@ -15,8 +15,8 @@ const IngredientField = ({ field, onDelete, onChange }: FieldProps) => {
     const handleChange = () => {
         onChange({
             quantity: quantityRef.current?.value ? parseInt(quantityRef.current.value) : field.quantity,
-            name: nameRef.current?.value || field.name,
-            unit: unitRef.current?.value || field.unit
+            name: nameRef.current?.value,
+            unit: unitRef.current?.value
         });
     };
 

@@ -5,6 +5,7 @@ import InternalServerError from "../errors/internal-server-error";
 import NotFoundError from "../errors/not-found";
 import { AuthUser } from "../middleware/authentication";
 import UnauthorizedError from "../errors/unauthorizedError";
+import bcrypt from "bcrypt"
 // Userrel kapcsolatos endpointok
 
 // Egy felhasználó lekérése id (user_id) alapjan
@@ -111,9 +112,13 @@ const getLoggedUser: RequestHandler = async (req, res, next) => {
 // patch user
 const updateUser: RequestHandler = async (req, res, next) => {
     // by the authenticaiton middleware
-    const { user } = req.body
+    const user = req.user as AuthUser
     const { fields } = req.body
     const validProperties = Object.keys(User.getAttributes());
+
+    if (!user) {
+        return next(new UnauthorizedError("Nem vagy bejelentkezve!"))
+    }
 
     let validFields: any = {};
 
@@ -125,6 +130,23 @@ const updateUser: RequestHandler = async (req, res, next) => {
 
     if (Object.getOwnPropertyNames(validFields).length === 0) {
         return next(new BadRequestError("Invalid properties"))
+    }
+
+    //hashing
+    let hashedPassword: string | undefined = undefined;
+
+    if (validFields.password) {
+        try {
+            const salt = await bcrypt.genSalt(10);
+            hashedPassword = await bcrypt.hash(validFields.password, salt);
+        } catch (error) {
+            console.error("Error hashing password:", error);
+            return next(new InternalServerError("Error processing password"));
+        }
+    }
+
+    if (hashedPassword) {
+        validFields.password = hashedPassword
     }
 
 

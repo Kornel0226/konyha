@@ -12,9 +12,9 @@ const RecipeItem: FC<{ recipe: Recipe, deleteRecipe: () => void, isOwn: boolean 
 
 
     return (
-        <div className="cursor-pointer flex flex-col w-[100%] lg:max-w-[200px] p-1 rounded-xl m-1 bg-orange-600 hover:transform hover:scale-110 transition-transform duration-300 ease-in-out">
-            <div className="w-full h-[25vh]" onClick={() => navigate("/receptek/" + recipe.recipe_id)}>
-                <Image size="200px" img={recipe.image} />
+        <div className="cursor-pointer h-max flex flex-col w-[100%] lg:max-w-[200px] p-1 rounded-xl m-1 bg-orange-600 hover:transform hover:scale-110 transition-transform duration-300 ease-in-out">
+            <div className="w-full h-max lg:h-[25vh]" onClick={() => navigate("/receptek/" + recipe.recipe_id)}>
+                <Image img={recipe.image} />
                 <h2 className="text-center text-xl break-word">{recipe.title}</h2>
             </div>
             <div className="flex flex-row">

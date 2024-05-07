@@ -11,11 +11,12 @@ userRouter.route("/auth").post(login)
 
 userRouter.route("/register").post(register)
 
-userRouter.route("/user").get(authentication, getLoggedUser)
+userRouter.route("/user").get(authentication, getLoggedUser).patch(authentication, updateUser)
 
 userRouter.route("/user/recipes").get(authentication, getUserRecipes)
 
-userRouter.route("/:id").get(getUser).patch(authentication, updateUser)
+userRouter.route("/:id").get(getUser)
+
 
 
 
