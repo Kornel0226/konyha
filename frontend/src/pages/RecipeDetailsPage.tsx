@@ -60,7 +60,7 @@ const RecipeDetailsPage = () => {
     }
 
     if (error) {
-        return <div>Error: {"Váratlan hiba tortent"}</div>;
+        return <div>Error: {"Nincs ilyen recept"}</div>;
     }
 
 

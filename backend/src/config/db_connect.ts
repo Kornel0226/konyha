@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv"
 
+dotenv.config()
 type DBConfig = {
     username: string;
     password?: string; // Include password field for production
@@ -8,14 +10,23 @@ type DBConfig = {
     dialect: 'mysql'; // MySQL dialect
 }
 
+
+const username = process.env.DBUSERNAME
+const database = process.env.DATABASE
+const host = process.env.DBHOST
+
+if( !username || !database || !host){
+    throw new Error('Hiányzik adatbázishoz szükséges info')
+}
+
 const config: {
     development: DBConfig;
     production: DBConfig;
 } = {
     "development": {
-        "username": "root",
-        "database": "kozossegikonyha",
-        "host": "localhost",
+        "username": username,
+        "database": database,
+        "host": host,
         "dialect": "mysql"
     },
     "production": {

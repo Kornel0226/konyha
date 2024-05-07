@@ -30,7 +30,7 @@ const IngredientCreation: FC<{ ingredientsChange: (ingredients: Ingredient[]) =>
         <div className="flex flex-col">
             <div className="flex flex-col border-b-2 border-orange-800 lg:justify-center">
                 <h2 className="text-5xl text-orange-600 font-semibold">Hozzávalók</h2>
-                <button className="mt-5 p-2 w-1/2 lg:w-1/4 mb-5 rounded-lg bg-green-800" type="button" onClick={increment}>Mezo hozzáadása</button>
+                <button className="mt-5 p-2 w-1/2 lg:w-1/4 mb-5 rounded-lg bg-green-800" type="button" onClick={increment}>Mező hozzáadása</button>
 
             </div>
 

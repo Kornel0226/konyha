@@ -32,7 +32,7 @@ const Login = () => {
             <Form className="mb-8" method="post">
                 <Input name="email" type="email" label="Email" />
                 <Input name="password" type="password" label="Password" />
-                <div className="flex flex-row justify-between">
+                <div className="flex mt-4 flex-row justify-between">
                     <button className="ml-4 mr-4 w-full p-3 bg-green-600 rounded-md hover:bg-green-800">Bejelentkezés</button>
                     <button className="ml-4 mr-4 w-full p-3 bg-green-600 rounded-md  hover:bg-green-800" type="button" onClick={() => navigate("/register")}>Regisztráció</button>
                 </div>

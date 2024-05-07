@@ -71,6 +71,17 @@ const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
             return;
         }
 
+        if (ingredients.length === 0){
+            openModal('nem adtál meg egy hozzávalót sem')
+            return
+        }
+
+        ingredients.forEach((ingredient) => {
+            if (!ingredient.name || ingredient.name.trim() === ""){
+                openModal("Üres hozzávaló név")
+            }
+        })
+
 
         formData.append('ingredients', JSON.stringify(ingredients))
 
@@ -85,7 +96,7 @@ const EditRecipePage: FC<{ token: string, }> = ({ token }) => {
     return <Form encType={"multipart/form-data"} className="flex-1 bg-orange-300 p-10 h-max" onSubmit={(event) => onSubmitHandler(event)}>
         <div className="flex flex-col">
             <h1 className="text-[2rem] lg:text-[5rem] text-orange-600 font-bold mb-10 border-b-2 border-orange-800">Recept Módosítása</h1>
-            {recipeData && <div className="flex flex-col lg:flex-row lg:gap-40">
+            {recipeData && <div className="flex flex-col xl:flex-row xl:gap-40">
                 <div>
                     <div className="flex flex-col lg:flex-row gap-8 mb-10 w-max">
                         <div>

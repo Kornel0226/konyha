@@ -70,12 +70,13 @@ const Recipes = () => {
         navigate(queries);
     }
     return (
-        <div className="w-full flex flex-col h-max sm:flex-row min-h-[100vh]">
+        <div className="w-full flex flex-col sm:flex-row min-h-[100vh]">
             <RecipesFilter onSubmit={handleFilters} />
-            <div className="bg-orange-300 h-max min-h-[100vh] w-[100vw] p-10 pt-20">
+            <div className="bg-orange-300  min-h-[100vh] w-[100vw] p-10 pt-20">
                 <h1 className="text-5xl text-orange-500 font-bold mb-10">Receptek</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-                    {recipes.map(recipe => <RecipeItem key={recipe.recipe_id} recipe={recipe} />)}
+                    {recipes.length !== 0 && recipes.map(recipe => <RecipeItem key={recipe.recipe_id} recipe={recipe} />)}
+                    {recipes.length === 0 && <h1>Nincs találat</h1>}
                 </div>
             </div>
         </div>

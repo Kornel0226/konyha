@@ -23,8 +23,9 @@ const IngredientField = ({ field, onDelete, onChange }: FieldProps) => {
     return (
         <div className="flex flex-col lg:flex-row border-b-2 border-orange-700 shadow-lg shadow-orange-900">
             <div className="flex flex-col m-4">
-                <label htmlFor="" className="text-black font-bold text-xl">Darab</label>
+                <label htmlFor="quantity" className="text-black font-bold text-xl">Darab</label>
                 <input
+                    id="quantity"
                     form="nonExistentForm"
                     type="number"
                     ref={quantityRef}
@@ -36,8 +37,9 @@ const IngredientField = ({ field, onDelete, onChange }: FieldProps) => {
                 />
             </div>
             <div className="flex flex-col m-4 ">
-                <label htmlFor="" className="text-black font-bold text-xl">Név</label>
+                <label htmlFor="name" className="text-black font-bold text-xl">Név</label>
                 <input
+                    id="name"
                     form="nonExistentForm"
                     type="text"
                     name="name"
@@ -48,8 +50,9 @@ const IngredientField = ({ field, onDelete, onChange }: FieldProps) => {
                 />
             </div>
             <div className="flex flex-col m-4">
-                <label htmlFor="" className="text-black font-bold text-xl">Mértékegység</label>
+                <label htmlFor="unit" className="text-black font-bold text-xl">Mértékegység</label>
                 <input
+                    id="unit"
                     form="nonExistentForm"
                     type="text"
                     ref={unitRef}
@@ -60,7 +63,7 @@ const IngredientField = ({ field, onDelete, onChange }: FieldProps) => {
                 />
             </div>
             <div className="flex flex-col justify-center pb-10">
-                <button className="bg-red-700 w-1/2 lg:w-full p-2 rounded-lg shadow-lg" type="button" onClick={onDelete}>torles</button>
+                <button className="bg-red-700 w-1/2 lg:w-full p-2 rounded-lg shadow-lg" type="button" onClick={onDelete}>törles</button>
             </div>
         </div>
     );

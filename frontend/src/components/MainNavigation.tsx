@@ -20,7 +20,6 @@ export const MainNav = () => {
                 </button>
                 <menu className={`w-full bg-orange-400 text-2xl font-bold ${isMenuOpen ? "block absolute top-full left-0 z-50 border-black border-x-2 border-t-2" : "hidden"} md:block md:flex-col`}>
                     <ul className={`flex flex-row ${isMenuOpen ? "flex-col" : "gap-6"}`}>
-                        <li className={`${isMenuOpen ? "text-center border-b-2 border-black py-2" : ""} text-black`} onClick={() => setIsMenuOpen(false)}><NavLink to="">Kezdőlap</NavLink></li>
                         <li className={`${isMenuOpen ? "text-center border-b-2 border-black py-2" : ""} text-black`} onClick={() => setIsMenuOpen(false)}><NavLink to="/receptek">Receptek</NavLink></li>
                         {!user && <li className={`${isMenuOpen ? "text-center border-b-2 border-black py-2" : "ml-auto"} text-black`} onClick={() => setIsMenuOpen(false)}><NavLink to="/login">Bejelentkezés</NavLink></li>}
                         {!user && <li className={`${isMenuOpen ? "text-center border-b-2 border-black py-2" : ""} text-black`} onClick={() => setIsMenuOpen(false)}><NavLink to="/register">Regisztráció</NavLink></li>}

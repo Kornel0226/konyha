@@ -21,6 +21,7 @@ const UserDetailsInput = forwardRef<HTMLInputElement, InputProps>(({ error, labe
         <div className="flex flex-col">
             <label className="text-xl text-gray-500" htmlFor={name}>{label}</label>
             <input
+                id={name}
                 type={type}
                 name={name}
                 ref={ref}

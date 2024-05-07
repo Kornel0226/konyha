@@ -103,17 +103,17 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
     return (
         <>
             {!isMobile && (
-                <Form onSubmit={handleSubmit} className="bg-green-800 w-[20%] h-[100vh]">
+                <Form onSubmit={handleSubmit} className="bg-green-800 w-[20%] min-[100vh]">
                     <h1 className="text-3xl font-bold p-3 border-b-2 border-r-2 border-black">Szűrők</h1>
                     <ul className="flex flex-col text-3xl">
                         <li className="p-4 border-2 border-t-0 border-l-0 border-black">
                             <div className="flex flex-col gap-5">
                                 <label htmlFor="diff">Nehézség</label>
                                 <select name="difficulty_level" className="bg-white text-black" id="diff">
-                                    <option value="any">Mind</option>
-                                    <option value="EASY">Konnyu</option>
-                                    <option value="MEDIUM">Kozepes</option>
-                                    <option value="HARD">Nehéz</option>
+                                    <option value="any">mind</option>
+                                    <option value="EASY">könnyű</option>
+                                    <option value="MEDIUM">közepes</option>
+                                    <option value="HARD">nehéz</option>
                                 </select>
                             </div>
                         </li>
@@ -121,14 +121,14 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
                             <div className="flex flex-col gap-5">
                                 <label htmlFor="cat">Kategória</label>
                                 <select name="category" className="bg-white text-black w-full" id="cat">
-                                    <option value="any">Mind</option>
+                                    <option value="any">mind</option>
                                     {categories && categories.map(category => <option key={category.category_id} value={category.category_id}>{category.name}</option>)}
                                 </select>
                             </div>
                         </li>
                         <li className="p-4 border-2 border-t-0 border-l-0 border-black">
                             <div>
-                                <h2>Elkészítési ido</h2>
+                                <h2>Elkészítési idő</h2>
                                 <input type="checkbox" onChange={handleOnCheckChange} />
                                 <div className={timeClasses}>
                                     <div className="flex flex-col gap-3 mb-5">
@@ -143,13 +143,13 @@ const RecipesFilter: FC<{ onSubmit: (filterObject: FilterObject) => void }> = ({
                             </div>
                         </li>
                     </ul>
-                    <button>SZURES</button>
+                    <button className="mt-2 p-2 bg-orange-700">Kreresés</button>
                 </Form>
             )}
 
             {isMobile && (
                 <div className="relative "> {/* Increase z-index value */}
-                    <button className=" absolute mt-4 ml-4 bg-green-800 p-2 rounded-md text-black" onClick={toggleFilters}> {/* Increase z-index value */}
+                    <button className=" absolute mt-4 ml-4 bg-green-800 p-2 rounded-md text-black" onClick={toggleFilters}> 
                         {isFiltersOpen ? 'Szűrők bezárása' : 'Szűrők megnyitása'}
                     </button>
                     <div className="top-1 left-0 h-max w-full bg-green-900 absolute" hidden={!isFiltersOpen}> {/* Increase z-index value */}

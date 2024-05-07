@@ -16,12 +16,13 @@ const ErrorModal = () => {
     },);
 
     return (
-        <dialog className="bg-orange-300 lg:w-[40%]" ref={modal}>
+        <dialog className="bg-yellow-500 rounded-md shadow-2xl shadow-black lg:w-[40%]" ref={modal}>
             <div className="flex flex-col">
                 <button className="self-end p-2 rounded-lg bg-red-700 m-5" onClick={closeModal}>
                     Bezárás
                 </button>
-                <h2 className="text-red-700">{modalMessage}</h2>
+                <h1 className="text-center text-red-700 text-4xl">Hiba</h1>
+                <h2 className="text-red-700 text-center text-2xl mb-5">{modalMessage}</h2>
             </div>
         </dialog>
     );

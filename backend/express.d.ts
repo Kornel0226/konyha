@@ -1,5 +1,5 @@
 import { Request } from "express"
-import { AuthUser } from "./middleware/authentication"
+import { AuthUser } from "./src/middleware/authentication"
 
 declare module "express" {
     export interface Request {

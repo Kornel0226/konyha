@@ -27,11 +27,6 @@ export let database: Sequelize;
 const uploadFolders = ['uploads/foods', 'uploads/recipes', 'uploads/userpictures'];
 
 // Create the folders if they don't exist
-uploadFolders.forEach(folder => {
-    if (!fs.existsSync(folder)) {
-        fs.mkdirSync(folder, { recursive: true });
-    }
-});
 
 app.use(express.urlencoded({ extended: true }));
 

@@ -13,6 +13,9 @@ import RecipeDetailsPage from "../pages/RecipeDetailsPage";
 import Recipes from "../pages/RecipesPage";
 import ErrorModal from "../components/ErrorModal";
 import ErrorPage from "../pages/ErrorPage";
+import Start from "../pages/StartPage";
+import NotLoggedIn from "../pages/NotLoggedInError";
+
 
 
 const AppRouter = () => {
@@ -25,7 +28,7 @@ const AppRouter = () => {
             errorElement: <ErrorPage />,
             action: loginAction,
             children: [
-                { index: true, element: <h1>Start</h1> },
+                { index: true, element: <Start/> },
                 { path: "login", element: <Login />, action: loginAction },
                 { path: "register", element: <Register />, action: regAction },
                 {
@@ -34,20 +37,20 @@ const AppRouter = () => {
                     children: [
                         {
                             path: "adataim",
-                            element: user ? <UserDetailsWrapper token={user.token} /> : null,
+                            element: user ? <UserDetailsWrapper token={user.token} /> : <NotLoggedIn/>,
                         },
                         {
                             path: "recepteim",
-                            element: user ? <UserRecipesWrapper token={user.token} /> : null,
+                            element: user ? <UserRecipesWrapper token={user.token} /> : <NotLoggedIn/>,
                         },
                         {
                             path: "recepteim/új",
-                            element: user ? <RecipeCreation token={user.token} /> : <h1>xdd</h1>,
+                            element: user ? <RecipeCreation token={user.token} /> : <NotLoggedIn/>,
 
                         },
                         {
                             path: "recepteim/modositas",
-                            element: user ? <EditRecipePage token={user.token} /> : <h1>xdd</h1>,
+                            element: user ? <EditRecipePage token={user.token} /> : <NotLoggedIn/>,
                         }
                         // Add other routes for the profile page
                     ],
